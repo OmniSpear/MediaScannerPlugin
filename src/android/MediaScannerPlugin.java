@@ -11,14 +11,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-/**
- * MediaScannerPlugin.java
- *
- * Inspirated by Joseph's "Saving Image to Android device’s Gallery – Phonegap Android" plugin
- * https://jbkflex.wordpress.com/2012/12/23/saving-image-to-android-devices-gallery-phonegap-android/
- *
- * @author Peter Gao <peter@spacefluxlabs.com>
- */
 public class MediaScannerPlugin extends CordovaPlugin {
     public static final String ACTION = "scanFile";
     private static final String TAG = "MediaScannerPlugin";
@@ -29,8 +21,14 @@ public class MediaScannerPlugin extends CordovaPlugin {
         if (action.equals(ACTION)) {
             /* Invoke the system's media scanner to add your photo to the Media Provider's database,
             * making it available in the Android Gallery application and to other apps. */
-            cordova.getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file:///mnt/sdcard"))); 
+            String path = args.getString(0);
 
+            Log.d(TAG, "path is "+path);
+
+
+            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            intent.setData(Uri.parse(path));
+            cordova.getActivity().sendBroadcast(intent);
             callbackContext.success();
 
             return true;
